@@ -3,6 +3,7 @@
 import { useState } from 'react';
 import { supabase } from '@/lib/supabase/client';
 import { uploadAudioFile } from '@/lib/supabase/uploadAudio';
+import { v4 as uuidv4 } from 'uuid';
 
 export default function UploadNotePage() {
   const [file, setFile] = useState<File | null>(null);
@@ -18,7 +19,6 @@ export default function UploadNotePage() {
       return;
     }
 
-    // Create a Supabase client instance
     const {
       data: { session },
     } = await supabase.auth.getSession();
@@ -29,15 +29,20 @@ export default function UploadNotePage() {
     }
 
     try {
-        // Upload the audio file to Supabase storage and get the public URL
-      const audioUrl = await uploadAudioFile(file, session.user.id);
+      // Genera un ID único para el archivo
+      const uniqueId = uuidv4();
+
+      // Sube el audio con ese ID como nombre base
+      const audioUrl = await uploadAudioFile(file, session.user.id, uniqueId);
 
       if (!audioUrl) {
         setStatus('Failed to upload audio.');
         return;
       }
-        // Insert the note into the database
+
+      // Guarda los metadatos en la base de datos
       const { error } = await supabase.from('notes').insert({
+        id: uniqueId,
         title,
         audio_url: audioUrl,
         user_id: session.user.id,
@@ -48,7 +53,7 @@ export default function UploadNotePage() {
         setStatus('Error saving note.');
         return;
       }
-        // Successfully uploaded and saved the note
+
       setStatus('Note uploaded successfully!');
       setTitle('');
       setFile(null);
