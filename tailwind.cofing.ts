@@ -1,21 +1,15 @@
+// tailwind.config.ts
+import { type Config } from 'tailwindcss'
 
-/** @type {import('tailwindcss').Config} */
-const config = {
-  content: ['./app/**/*.{ts,tsx}', './components/**/*.{ts,tsx}'],
+const config: Config = {
+  content: [
+    './app/**/*.{ts,tsx}',
+    './components/**/*.{ts,tsx}',
+    './pages/**/*.{ts,tsx}',
+  ],
   theme: {
-    extend: {
-      colors: {
-        terminal: {
-          bg: '#000000',
-          text: '#00FF00',
-        },
-      },
-      fontFamily: {
-        mono: ['ui-monospace', 'Menlo', 'monospace'],
-      },
-    },
+    extend: {},
   },
   plugins: [],
 }
-
 export default config

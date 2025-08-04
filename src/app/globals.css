@@ -1,6 +1,7 @@
-@import "tailwindcss/preflight";
-@tailwind utilities;
+@tailwind layer(base);
+@tailwind layer(components);
+@tailwind layer(utilities);
 
 body {
-  @apply bg-terminal-bg text-terminal-text font-mono;
+  @apply bg-black text-green-400 font-mono;
 }
