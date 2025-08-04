@@ -1,19 +1,26 @@
 // src/lib/auth.ts
+import { createClient } from '@supabase/supabase-js';
 import { supabase } from './supabase/client';
 
-export async function signUp(email: string, password: string) {
-  return await supabase.auth.signUp({ email, password })
+export async function signUpWithEmail(email: string, password: string) {
+  const { data, error } = await supabase.auth.signUp({ email, password });
+  if (error) throw error;
+  return data;
 }
 
-export async function signIn(email: string, password: string) {
-  return await supabase.auth.signInWithPassword({ email, password })
+export async function signInWithEmail(email: string, password: string) {
+  const { data, error } = await supabase.auth.signInWithPassword({ email, password });
+  if (error) throw error;
+  return data;
 }
 
 export async function signOut() {
-  return await supabase.auth.signOut()
+  const { error } = await supabase.auth.signOut();
+  if (error) throw error;
 }
 
-export async function getUser() {
-  const { data: { user } } = await supabase.auth.getUser()
-  return user
+export async function getSession() {
+  const { data, error } = await supabase.auth.getSession();
+  if (error) throw error;
+  return data.session;
 }
