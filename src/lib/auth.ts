@@ -18,7 +18,7 @@ export async function signUpWithEmail(email: string, password: string) {
     return { user: null, error: signUpError };
   }
 
-  // Validamos que email exista
+  // Check if user email is defined
   if (!authData.user.email) {
     return { user: null, error: new Error('User email is undefined') };
   }
@@ -47,6 +47,12 @@ export async function signInWithEmail(email: string, password: string) {
   return data;
 }
 
+// OAuth login (Google, GitHub, etc.)
+export async function signInWithOAuth(provider: 'google' | 'github') {
+  const { error } = await supabase.auth.signInWithOAuth({ provider });
+  if (error) throw error;
+}
+
 // Signout
 export async function signOut() {
   const { error } = await supabase.auth.signOut();
@@ -61,7 +67,7 @@ export async function getSession() {
 }
 
 // Get user profile
-export async function getUserProfile(id: string) {
+export async function getUserProfile() {
   const {
     data: { user },
     error: userError,
